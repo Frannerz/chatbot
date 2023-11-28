@@ -1,12 +1,16 @@
 require('dotenv').config();
-const { Client, IntentsBitField } = require('discord.js');
+const { Client, IntentsBitField, GatewayIntentBits } = require('discord.js');
+const { commandsList } = require('./commands')
+
+const prefix = '!';
 
 const client = new Client ({
     intents: [
         IntentsBitField.Flags.Guilds,
         IntentsBitField.Flags.GuildMessages,
         IntentsBitField.Flags.GuildMembers,
-        IntentsBitField.Flags.MessageContent
+        IntentsBitField.Flags.MessageContent,
+        GatewayIntentBits.Guilds,
     ]
 })
 
@@ -16,11 +20,15 @@ client.once('ready', (c)=>{
 
 client.on('messageCreate', (message)=>{
     console.log(message.content);
-    if(message.author.bot){
+    if(message.author.bot || !message.content.startsWith(prefix)){
         return;
     }
-    if(message.content === 'hello'){
-        message.reply('Hey! How can I help?')
+   
+    const command = message.content.slice(1);
+    console.log(command)
+    
+    if(command in commandsList){
+        commandsList[command](message)
     }
 })
 

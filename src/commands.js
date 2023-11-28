@@ -3,7 +3,7 @@ const commandsList = {
   greet: (message) => replyToMessage(message, "hello"),
   //joke:
   //echo:
-  //help:
+  help: help,
 };
 
 function replyToMessage(msg, answer) {
@@ -13,8 +13,11 @@ function replyToMessage(msg, answer) {
 //function to tell a joke
 function tellAJoke() {}
 
-// help function should list all of the commands available (object.keys(commandsList))?
-function help() {}
+// help function lists all of the commands available
+function help(message) {
+  const availableCommands = Object.keys(commandsList).join(", ");
+  replyToMessage(message, `Available commands: ${availableCommands}`);
+}
 
 // Echo Command- when a user types !echo [message], the bot will repeat the message back to them.
 function echo() {}

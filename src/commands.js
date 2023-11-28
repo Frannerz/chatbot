@@ -12,10 +12,15 @@ function replyToMessage(msg, answer) {
   msg.reply(answer);
 }
 
-//function to tell a joke
-function tellAJoke(message) {
-  const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-  replyToMessage(message, randomJoke);
+// Function to tell a joke with a delay
+async function tellAJoke(message) {
+  const joke = getRandomJoke();
+  await replyToMessage(message, `${joke.question}`);
+
+  // Delay for 2 seconds
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  await replyToMessage(message, `${joke.answer}`);
 }
 
 // help function should list all of the commands available (object.keys(commandsList))?
@@ -26,5 +31,10 @@ function echo() {}
 
 // Command Logging: As a developer, I want the bot to log the use of commands
 function logCommands() {}
+
+// Helper function to get a random joke
+function getRandomJoke() {
+  return jokes[Math.floor(Math.random() * jokes.length)];
+}
 
 module.exports = { commandsList };

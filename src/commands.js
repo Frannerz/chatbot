@@ -5,7 +5,7 @@ const commandsList = {
   greet: (message) => replyToMessage(message, "hello"),
   joke: tellAJoke,
   //echo:
-  //help:
+  help: help,
 };
 
 function replyToMessage(msg, answer) {
@@ -23,14 +23,17 @@ async function tellAJoke(message) {
   await replyToMessage(message, `${joke.answer}`);
 }
 
-// help function should list all of the commands available (object.keys(commandsList))?
-function help() {}
+// help function lists all of the commands available
+function help(message) {
+  const availableCommands = Object.keys(commandsList).join(", ");
+  replyToMessage(message, `Available commands: ${availableCommands}`);
+}
 
 // Echo Command- when a user types !echo [message], the bot will repeat the message back to them.
-function echo() {}
+//function echo() {}
 
 // Command Logging: As a developer, I want the bot to log the use of commands
-function logCommands() {}
+//function logCommands() {}
 
 // Helper function to get a random joke
 function getRandomJoke() {

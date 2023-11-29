@@ -2,7 +2,7 @@ const { jokes } = require("./jokes");
 
 const commandsList = {
   ping: (message) => replyToMessage(message, "Pong!"),
-  greet: (message) => replyToMessage(message, "hello"),
+  greet: (message) => replyToMessage(message, `Hello ${message.author.username}!`),
   joke: tellAJoke,
   //echo:
   help: help,

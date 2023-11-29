@@ -19,13 +19,13 @@ client.once("ready", (c) => {
 });
 
 client.on("messageCreate", (message) => {
-  console.log(message.content);
+  //console.log(message);
   if (message.author.bot || !message.content.startsWith(prefix)) {
     return;
   }
-
+ 
   const command = message.content.slice(1);
-  console.log(command);
+  //console.log(command);
 
   if (command in commandsList) {
     commandsList[command](message);

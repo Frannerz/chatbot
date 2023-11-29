@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { Client, IntentsBitField, GatewayIntentBits } = require("discord.js");
-const { commandsList } = require("./commands");
+const { commandsList, commandLog } = require("./commands");
 
 const prefix = "!";
 
@@ -14,8 +14,15 @@ const client = new Client({
   ],
 });
 
+//const channel = client.channels.cache.get(process.env.CHANNEL);
+
 client.once("ready", (c) => {
   console.log(`${c.user.tag} is online!`);
+//   if (channel) {
+//     channel.send(`${c.user.tag} is online! Type !help to view possible commands.`);
+//   } else {
+//     console.error('Text channel not found.')
+//   }
 });
 
 client.on("messageCreate", (message) => {
@@ -25,11 +32,14 @@ client.on("messageCreate", (message) => {
   }
 
   const command = message.content.slice(1);
-  console.log(command);
-
+  //console.log(command);
+  
   if (command in commandsList) {
+    commandLog.push(message.content);
     commandsList[command](message);
   }
 });
 
+
 client.login(process.env.TOKEN);
+

@@ -31,6 +31,8 @@ function getWeather (location) {
     fetch(weatherURL)
     .then(response => response.json())
     .then(data => {
-
+        const temp = data.current.temp_c;
+        const condition = data.current.condition.text;
+        const time = data.location.localtime;
     })
 }

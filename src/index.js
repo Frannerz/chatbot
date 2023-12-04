@@ -13,7 +13,7 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.DirectMessages,
   ],
-  partials: [Partials.Message, Partials.Channel, Partials.Reaction]
+   partials: [Partials.Message, Partials.Channel, Partials.Reaction]
 });
 
 
@@ -22,12 +22,17 @@ const mentionsLog = [];
 
 client.once("ready", (c) => {
   console.log(`${c.user.tag} is online!`);
+//   if (channel) {
+//     channel.send(`${c.user.tag} is online! Type !help to view possible commands.`);
+//   } else {
+//     console.error('Text channel not found.')
+//   }
 });
 
 client.on("messageCreate", (message) => {
-
-  console.log(`Received message: ${message.content}`);  
-  if (message.author.bot || !message.content.startsWith(prefix)) {
+  
+  console.log(`Received message: ${message.content}`);
+if (message.author.bot || !message.content.startsWith(prefix)) {
     return;
   }
   console.log(`Processing message: ${message.content}`);
@@ -46,7 +51,7 @@ client.on("messageCreate", (message) => {
     console.log(`Bot mentioned in message: ${message.content}`);
     console.log(mentionsLog);
   }
- 
+
   // check if the bot has been mentioned and set botMentioned variable to true or false
   const botMentioned = message.mentions.has(client.user.id)|| message.channel.type === 1;
   console.log(`Bot mentioned: ${botMentioned}`);
@@ -80,14 +85,11 @@ client.on("messageCreate", (message) => {
 
   console.log(`command passed: ${command}`);
 
-
   if (command in commandsList) {
     commandLog.push(message.content);
     commandsList[command](message);
   }
-
 });
-
 
 
 client.login(process.env.TOKEN);

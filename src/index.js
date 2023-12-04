@@ -1,6 +1,6 @@
 require("dotenv").config();
-const { Client, IntentsBitField, GatewayIntentBits } = require("discord.js");
-const { commandsList } = require("./commands");
+const { Client, IntentsBitField, GatewayIntentBits, Partials } = require("discord.js");
+const { commandsList, commandLog } = require("./commands");
 
 const prefix = "!";
 
@@ -11,16 +11,21 @@ const client = new Client({
     IntentsBitField.Flags.GuildMembers,
     IntentsBitField.Flags.MessageContent,
     GatewayIntentBits.Guilds,
+    GatewayIntentBits.DirectMessages,
   ],
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction]
 });
 
+
 const mentionsLog = [];
+
 
 client.once("ready", (c) => {
   console.log(`${c.user.tag} is online!`);
 });
 
 client.on("messageCreate", (message) => {
+
   console.log(`Received message: ${message.content}`);  
   if (message.author.bot || !message.content.startsWith(prefix)) {
     return;
@@ -42,16 +47,48 @@ client.on("messageCreate", (message) => {
     console.log(mentionsLog);
   }
  
-  const command = message.content.slice(1);
+  // check if the bot has been mentioned and set botMentioned variable to true or false
+  const botMentioned = message.mentions.has(client.user.id)|| message.channel.type === 1;
+  console.log(`Bot mentioned: ${botMentioned}`);
 
-  
+  if (
+    message.author.bot ||
+    (!message.content.startsWith(prefix) && !botMentioned)
+  ) {
+    console.log("message ignored!");
+    return;
+  }
 
-  //console.log(command);
+  //check context of message
+  if(botMentioned) {
+    if(message.content.includes('?')) {
+    message.reply("That's a good question! Let me think about it...");
+    } 
+    const greeting = ["hi", "hello", "hey"];
+    for(const greet of greeting){
+      if(message.content.includes(greet)){
+        message.reply(`Hi, ${message.author}, how can I help you?`);
+      }
+    }
+  };
+
+
+  // Remove the prefix or mention from the message content
+  const command = botMentioned
+    ? message.content.slice(client.user.id.length + 4).trim()
+    : message.content.slice(prefix.length).trim();
+
+  console.log(`command passed: ${command}`);
+
 
   if (command in commandsList) {
+    commandLog.push(message.content);
     commandsList[command](message);
   }
 
 });
 
+
+
 client.login(process.env.TOKEN);
+

@@ -1,4 +1,5 @@
 const { jokes } = require("./jokes");
+const commandLog = [];
 
 const commandsList = {
   ping: (message) => replyToMessage(message, "Pong!"),
@@ -6,6 +7,7 @@ const commandsList = {
   joke: tellAJoke,
   //echo:
   help: help,
+  log: logCommands,
 };
 
 function replyToMessage(msg, answer) {
@@ -32,8 +34,14 @@ function help(message) {
 // Echo Command- when a user types !echo [message], the bot will repeat the message back to them.
 //function echo() {}
 
-// Command Logging: As a developer, I want the bot to log the use of commands
-//function logCommands() {}
+//Function to display logged commands
+function logCommands (message) {
+  if (commandLog.length > 0) {
+    message.channel.send(`Command Log:\n\`\`\`json\n${JSON.stringify(commandLog, null, 2)}\n\`\`\``);
+  } else {
+    message.channel.send('The command log is empty.');
+  }
+}
 
 // Helper function to get a random joke
 function getRandomJoke() {
@@ -41,4 +49,5 @@ function getRandomJoke() {
 }
 
 
-module.exports = { commandsList };
+module.exports = { commandsList, commandLog };
+

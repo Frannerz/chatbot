@@ -48,4 +48,6 @@ function getRandomJoke() {
   return jokes[Math.floor(Math.random() * jokes.length)];
 }
 
+
 module.exports = { commandsList, commandLog };
+

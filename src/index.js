@@ -17,14 +17,36 @@ const client = new Client({
 });
 
 
+const mentionsLog = [];
+
 
 client.once("ready", (c) => {
   console.log(`${c.user.tag} is online!`);
 });
 
 client.on("messageCreate", (message) => {
-  //console.log(message);
 
+  console.log(`Received message: ${message.content}`);  
+  if (message.author.bot || !message.content.startsWith(prefix)) {
+    return;
+  }
+  console.log(`Processing message: ${message.content}`);
+
+
+  if (message.mentions.has(client.user.id)) {
+    const mentionInfo = {
+      content: message.content,
+      author: message.author.username,
+      timestamp: new Date(),
+      channel: message.channel.name,
+    };
+
+    mentionsLog.push(mentionInfo);
+
+    console.log(`Bot mentioned in message: ${message.content}`);
+    console.log(mentionsLog);
+  }
+ 
   // check if the bot has been mentioned and set botMentioned variable to true or false
   const botMentioned = message.mentions.has(client.user.id)|| message.channel.type === 1;
   console.log(`Bot mentioned: ${botMentioned}`);
@@ -57,6 +79,7 @@ client.on("messageCreate", (message) => {
     : message.content.slice(prefix.length).trim();
 
   console.log(`command passed: ${command}`);
+
 
   if (command in commandsList) {
     commandLog.push(message.content);

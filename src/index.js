@@ -40,6 +40,20 @@ client.on("messageCreate", (message) => {
     return;
   }
 
+  //check context of message
+  if(botMentioned) {
+    if(message.content.includes('?')) {
+    message.reply("That's a good question! Let me think about it...");
+    } 
+    const greeting = ["hi", "hello", "hey"];
+    for(const greet of greeting){
+      if(message.content.includes(greet)){
+        message.reply(`Hi, ${message.author}, how can I help you?`);
+      }
+    }
+  };
+
+
   // Remove the prefix or mention from the message content
   const command = botMentioned
     ? message.content.slice(client.user.id.length + 4).trim()

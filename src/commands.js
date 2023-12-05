@@ -1,4 +1,5 @@
 const { jokes } = require("./jokes");
+const { getWeather } = require("./weather");
 const { openaiResponse } = require("./openai");
 const commandLog = [];
 
@@ -9,7 +10,9 @@ const commandsList = {
   //echo:
   help: help,
   log: logCommands,
+  weather: getWeather,
   chat: chat,
+
 };
 
 function replyToMessage(msg, answer) {

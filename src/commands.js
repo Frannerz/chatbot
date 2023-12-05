@@ -59,7 +59,7 @@ function chat(message) {
   return openaiResponse(message);
 }
 
-chat("why is the sky blue?")
+//chat("why is the sky blue?")
 
 
 module.exports = { commandsList, commandLog };

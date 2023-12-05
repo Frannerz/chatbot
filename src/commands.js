@@ -14,7 +14,12 @@ const commandsList = {
 };
 
 function replyToMessage(msg, answer) {
-  msg.reply(answer);
+  // Check if the answer is not undefined and not an empty string
+  if (answer !== undefined && answer !== "") {
+    msg.reply(answer);
+  } else {
+    console.warn("Tried to send an empty message. Ignoring.");
+  }
 }
 
 // Function to tell a joke with a delay
@@ -54,20 +59,27 @@ function getRandomJoke() {
 }
 
 // function to access openai
+async function chat(message) {
+  const prompt = message;
 
-function chat(message) {
-  const prompt = message.content.slice("!chat".length).trim();
-
-  // Check if there is a prompt
   if (prompt) {
-    // Call the chat function with the extracted prompt
-    return openaiResponse(message, prompt);
+    try {
+      // Call the openaiResponse function and wait for the result
+      const response = await openaiResponse(prompt);
+
+      // Send the response back to the user
+      replyToMessage(message, response);
+    } catch (error) {
+      console.error("Error in openaiResponse:", error);
+      replyToMessage(
+        message,
+        "An error occurred while processing the request."
+      );
+    }
   } else {
     // Inform the user that they need to provide a prompt
     replyToMessage(message, "Please provide a prompt after `!chat`.");
   }
 }
-
-// chat("why is the sky blue?")
 
 module.exports = { commandsList, commandLog };

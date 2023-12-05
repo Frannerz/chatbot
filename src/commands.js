@@ -1,5 +1,6 @@
 const { jokes } = require("./jokes");
 const { getWeather } = require("./weather");
+const { openaiResponse } = require("./openai");
 const commandLog = [];
 
 const commandsList = {
@@ -9,7 +10,9 @@ const commandsList = {
   //echo:
   help: help,
   log: logCommands,
-  weather: getWeather
+  weather: getWeather,
+  chat: chat,
+
 };
 
 function replyToMessage(msg, answer) {
@@ -49,6 +52,14 @@ function logCommands (message) {
 function getRandomJoke() {
   return jokes[Math.floor(Math.random() * jokes.length)];
 }
+
+// function to access openai
+
+function chat(message) {
+  return openaiResponse(message);
+}
+
+chat("why is the sky blue?")
 
 
 module.exports = { commandsList, commandLog };

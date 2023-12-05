@@ -1,6 +1,6 @@
 require("dotenv").config();
 const openai = require('openai');
-//const openaikey = process.env.OPENAI;
+const openaikey = process.env.OPENAI;
 //const openai = new OpenAI();
 
 //openai.ChatCompletion.create()
@@ -12,7 +12,7 @@ function openaiResponse(message) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${}`,
+        'Authorization': `Bearer ${openaikey}`,
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
@@ -33,4 +33,6 @@ function openaiResponse(message) {
       });
   }
   
-  openaiResponse("test message")
+  // openaiResponse("why do cats purr?")
+
+  module.exports = { openaiResponse };

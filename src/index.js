@@ -1,5 +1,10 @@
 require("dotenv").config();
-const { Client, IntentsBitField, GatewayIntentBits, Partials } = require("discord.js");
+const {
+  Client,
+  IntentsBitField,
+  GatewayIntentBits,
+  Partials,
+} = require("discord.js");
 const { commandsList, commandLog } = require("./commands");
 
 const prefix = "!";
@@ -13,12 +18,10 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.DirectMessages,
   ],
-   partials: [Partials.Message, Partials.Channel, Partials.Reaction]
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
-
 const mentionsLog = [];
-
 
 client.once("ready", (c) => {
   console.log(`${c.user.tag} is online!`);
@@ -53,9 +56,10 @@ client.on("messageCreate", (message) => {
     if(message.content.includes('?') && !message.content.includes('!chat')) {
     message.reply("That's a good question! Try starting your question with !chat");
     } 
+
     const greeting = ["hi", "hello", "hey"];
-    for(const greet of greeting){
-      if(message.content.includes(greet)){
+    for (const greet of greeting) {
+      if (message.content.includes(greet)) {
         message.reply(`Hi, ${message.author}, how can I help you?`);
       }
     }
@@ -66,13 +70,21 @@ client.on("messageCreate", (message) => {
   const command = botMentioned
    ? message.content.split(' ')[1].slice(prefix.length).trim()
    : message.content.split(' ')[0].slice(prefix.length).trim();
-  
-  if (command in commandsList) {
-    commandLog.push(message.content);
-    commandsList[command](message);
+  //console.log(`command passed: ${command}`);
+
+  const isSpaceSeparatedCommand = command.includes(" ");
+  if (isSpaceSeparatedCommand) {
+    const [commandName, ...commandArgs] = command.split(" ");
+    if (commandName in commandsList) {
+      commandLog.push(message.content);
+      commandsList[commandName](message, commandArgs.join(" "));
+    }
+  } else {
+    if (command in commandsList) {
+      commandLog.push(message.content);
+      commandsList[command](message);
+    }
   }
 });
 
-
 client.login(process.env.TOKEN);
-

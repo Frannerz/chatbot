@@ -5,7 +5,8 @@ const commandLog = [];
 
 const commandsList = {
   ping: (message) => replyToMessage(message, "Pong!"),
-  greet: (message) => replyToMessage(message, `Hello ${message.author.username}!`),
+  greet: (message) =>
+    replyToMessage(message, `Hello ${message.author.username}!`),
   joke: tellAJoke,
   //echo:
   help: help,
@@ -16,7 +17,12 @@ const commandsList = {
 };
 
 function replyToMessage(msg, answer) {
-  msg.reply(answer);
+  // Check if the answer is not undefined and not an empty string
+  if (answer !== undefined && answer !== "") {
+    msg.reply(answer);
+  } else {
+    console.warn("Tried to send an empty message. Ignoring.");
+  }
 }
 
 // Function to tell a joke with a delay
@@ -40,11 +46,13 @@ function help(message) {
 //function echo() {}
 
 //Function to display logged commands
-function logCommands (message) {
+function logCommands(message) {
   if (commandLog.length > 0) {
-    message.channel.send(`Command Log:\n\`\`\`json\n${JSON.stringify(commandLog, null, 2)}\n\`\`\``);
+    message.channel.send(
+      `Command Log:\n\`\`\`json\n${JSON.stringify(commandLog, null, 2)}\n\`\`\``
+    );
   } else {
-    message.channel.send('The command log is empty.');
+    message.channel.send("The command log is empty.");
   }
 }
 
@@ -54,13 +62,27 @@ function getRandomJoke() {
 }
 
 // function to access openai
+async function chat(message) {
+  const prompt = message;
 
-function chat(message) {
-  return openaiResponse(message);
+  if (prompt) {
+    try {
+      // Call the openaiResponse function and wait for the result
+      const response = await openaiResponse(prompt);
+
+      // Send the response back to the user
+      replyToMessage(message, response);
+    } catch (error) {
+      console.error("Error in openaiResponse:", error);
+      replyToMessage(
+        message,
+        "An error occurred while processing the request."
+      );
+    }
+  } else {
+    // Inform the user that they need to provide a prompt
+    replyToMessage(message, "Please provide a prompt after `!chat`.");
+  }
 }
 
-//chat("why is the sky blue?")
-
-
 module.exports = { commandsList, commandLog };
-

@@ -1,4 +1,5 @@
 const { jokes } = require("./jokes");
+const { getWeather } = require("./weather");
 const commandLog = [];
 
 const commandsList = {
@@ -8,6 +9,7 @@ const commandsList = {
   //echo:
   help: help,
   log: logCommands,
+  weather: getWeather
 };
 
 function replyToMessage(msg, answer) {

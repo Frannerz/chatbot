@@ -22,20 +22,15 @@ const mentionsLog = [];
 
 client.once("ready", (c) => {
   console.log(`${c.user.tag} is online!`);
-//   if (channel) {
-//     channel.send(`${c.user.tag} is online! Type !help to view possible commands.`);
-//   } else {
-//     console.error('Text channel not found.')
-//   }
 });
 
 client.on("messageCreate", (message) => {
   
-  console.log(`Received message: ${message.content}`);
+  //console.log(`Received message: ${message.content}`);
 if (message.author.bot || !message.content.startsWith(prefix)) {
     return;
   }
-  console.log(`Processing message: ${message.content}`);
+  //console.log(`Processing message: ${message.content}`);
 
 
   if (message.mentions.has(client.user.id)) {
@@ -48,19 +43,19 @@ if (message.author.bot || !message.content.startsWith(prefix)) {
 
     mentionsLog.push(mentionInfo);
 
-    console.log(`Bot mentioned in message: ${message.content}`);
-    console.log(mentionsLog);
+    //console.log(`Bot mentioned in message: ${message.content}`);
+    //console.log(mentionsLog);
   }
 
   // check if the bot has been mentioned and set botMentioned variable to true or false
-  const botMentioned = message.mentions.has(client.user.id)|| message.channel.type === 1;
+  const botMentioned = message.mentions.has(client.user.id)|| message.channel.type === 'DM';
   console.log(`Bot mentioned: ${botMentioned}`);
 
   if (
     message.author.bot ||
     (!message.content.startsWith(prefix) && !botMentioned)
   ) {
-    console.log("message ignored!");
+    //console.log("message ignored!");
     return;
   }
 
@@ -80,10 +75,14 @@ if (message.author.bot || !message.content.startsWith(prefix)) {
 
   // Remove the prefix or mention from the message content
   const command = botMentioned
-    ? message.content.slice(client.user.id.length + 4).trim()
-    : message.content.slice(prefix.length).trim();
+    ? message.content.split(' ')[0].slice(client.user.id.length + 4).trim()
+    : message.content.split(' ')[0].slice(prefix.length).trim();
+    // ? message.content.slice(client.user.id.length + 4).trim()
+    // : message.content.slice(prefix.length).trim();
+    
 
-  console.log(`command passed: ${command}`);
+
+  //console.log(`command passed: ${command}`);
 
   if (command in commandsList) {
     commandLog.push(message.content);

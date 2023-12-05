@@ -4,7 +4,8 @@ const commandLog = [];
 
 const commandsList = {
   ping: (message) => replyToMessage(message, "Pong!"),
-  greet: (message) => replyToMessage(message, `Hello ${message.author.username}!`),
+  greet: (message) =>
+    replyToMessage(message, `Hello ${message.author.username}!`),
   joke: tellAJoke,
   //echo:
   help: help,
@@ -37,11 +38,13 @@ function help(message) {
 //function echo() {}
 
 //Function to display logged commands
-function logCommands (message) {
+function logCommands(message) {
   if (commandLog.length > 0) {
-    message.channel.send(`Command Log:\n\`\`\`json\n${JSON.stringify(commandLog, null, 2)}\n\`\`\``);
+    message.channel.send(
+      `Command Log:\n\`\`\`json\n${JSON.stringify(commandLog, null, 2)}\n\`\`\``
+    );
   } else {
-    message.channel.send('The command log is empty.');
+    message.channel.send("The command log is empty.");
   }
 }
 
@@ -53,11 +56,18 @@ function getRandomJoke() {
 // function to access openai
 
 function chat(message) {
-  return openaiResponse(message);
+  const prompt = message.content.slice("!chat".length).trim();
+
+  // Check if there is a prompt
+  if (prompt) {
+    // Call the chat function with the extracted prompt
+    return openaiResponse(message, prompt);
+  } else {
+    // Inform the user that they need to provide a prompt
+    replyToMessage(message, "Please provide a prompt after `!chat`.");
+  }
 }
 
-chat("why is the sky blue?")
-
+// chat("why is the sky blue?")
 
 module.exports = { commandsList, commandLog };
-

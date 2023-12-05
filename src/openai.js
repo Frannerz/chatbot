@@ -16,7 +16,7 @@ function openaiResponse(message) {
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
-        messages: [{ "role": "user", "content": `${message}` }],
+        messages: [{ "role": "user", "content": `${message}`}],
         temperature: 0.7,
       }),
     })
@@ -33,6 +33,7 @@ function openaiResponse(message) {
       });
   }
   
+
   // openaiResponse("why do cats purr?")
 
   module.exports = { openaiResponse };

@@ -1,5 +1,10 @@
 require("dotenv").config();
-const { Client, IntentsBitField, GatewayIntentBits, Partials } = require("discord.js");
+const {
+  Client,
+  IntentsBitField,
+  GatewayIntentBits,
+  Partials,
+} = require("discord.js");
 const { commandsList, commandLog } = require("./commands");
 
 const prefix = "!";
@@ -13,12 +18,10 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.DirectMessages,
   ],
-   partials: [Partials.Message, Partials.Channel, Partials.Reaction]
+  partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
-
 const mentionsLog = [];
-
 
 client.once("ready", (c) => {
   console.log(`${c.user.tag} is online!`);
@@ -31,7 +34,6 @@ if (message.author.bot || !message.content.startsWith(prefix)) {
     return;
   }
   //console.log(`Processing message: ${message.content}`);
-
 
   if (message.mentions.has(client.user.id)) {
     const mentionInfo = {
@@ -60,18 +62,17 @@ if (message.author.bot || !message.content.startsWith(prefix)) {
   }
 
   //check context of message
-  if(botMentioned) {
-    if(message.content.includes('?')) {
-    message.reply("That's a good question! Let me think about it...");
-    } 
+  if (botMentioned) {
+    if (message.content.includes("?")) {
+      message.reply("That's a good question! Let me think about it...");
+    }
     const greeting = ["hi", "hello", "hey"];
-    for(const greet of greeting){
-      if(message.content.includes(greet)){
+    for (const greet of greeting) {
+      if (message.content.includes(greet)) {
         message.reply(`Hi, ${message.author}, how can I help you?`);
       }
     }
-  };
-
+  }
 
   // Remove the prefix or mention from the message content
   const command = botMentioned
@@ -84,12 +85,19 @@ if (message.author.bot || !message.content.startsWith(prefix)) {
 
   //console.log(`command passed: ${command}`);
 
-  if (command in commandsList) {
-    commandLog.push(message.content);
-    commandsList[command](message);
+  const isSpaceSeparatedCommand = command.includes(" ");
+  if (isSpaceSeparatedCommand) {
+    const [commandName, ...commandArgs] = command.split(" ");
+    if (commandName in commandsList) {
+      commandLog.push(message.content);
+      commandsList[commandName](message, commandArgs.join(" "));
+    }
+  } else {
+    if (command in commandsList) {
+      commandLog.push(message.content);
+      commandsList[command](message);
+    }
   }
 });
 
-
 client.login(process.env.TOKEN);
-

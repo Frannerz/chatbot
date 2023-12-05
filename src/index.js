@@ -28,12 +28,6 @@ client.once("ready", (c) => {
 });
 
 client.on("messageCreate", (message) => {
-  
-  //console.log(`Received message: ${message.content}`);
-if (message.author.bot || !message.content.startsWith(prefix)) {
-    return;
-  }
-  //console.log(`Processing message: ${message.content}`);
 
   if (message.mentions.has(client.user.id)) {
     const mentionInfo = {
@@ -44,45 +38,38 @@ if (message.author.bot || !message.content.startsWith(prefix)) {
     };
 
     mentionsLog.push(mentionInfo);
-
-    //console.log(`Bot mentioned in message: ${message.content}`);
-    //console.log(mentionsLog);
   }
 
   // check if the bot has been mentioned and set botMentioned variable to true or false
   const botMentioned = message.mentions.has(client.user.id)|| message.channel.type === 'DM';
-  console.log(`Bot mentioned: ${botMentioned}`);
+  //console.log(`Bot mentioned: ${botMentioned}`);
 
   if (
     message.author.bot ||
     (!message.content.startsWith(prefix) && !botMentioned)
   ) {
-    //console.log("message ignored!");
     return;
   }
 
   //check context of message
-  if (botMentioned) {
-    if (message.content.includes("?")) {
-      message.reply("That's a good question! Let me think about it...");
-    }
+  if(botMentioned) {
+    if(message.content.includes('?') && !message.content.includes('!chat')) {
+    message.reply("That's a good question! Try starting your question with !chat");
+    } 
+
     const greeting = ["hi", "hello", "hey"];
     for (const greet of greeting) {
       if (message.content.includes(greet)) {
         message.reply(`Hi, ${message.author}, how can I help you?`);
       }
     }
-  }
+  };
 
+ 
   // Remove the prefix or mention from the message content
   const command = botMentioned
-    ? message.content.split(' ')[0].slice(client.user.id.length + 4).trim()
-    : message.content.split(' ')[0].slice(prefix.length).trim();
-    // ? message.content.slice(client.user.id.length + 4).trim()
-    // : message.content.slice(prefix.length).trim();
-    
-
-
+   ? message.content.split(' ')[1].slice(prefix.length).trim()
+   : message.content.split(' ')[0].slice(prefix.length).trim();
   //console.log(`command passed: ${command}`);
 
   const isSpaceSeparatedCommand = command.includes(" ");

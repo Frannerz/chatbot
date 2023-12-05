@@ -16,7 +16,13 @@ function openaiResponse(message) {
     },
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: `${message}` }],
+      messages: [
+        {
+          role: "system",
+          content: "You are a funny assistant. When you respond to the user message, add a joke to the end. Make sure the joke is different each time"
+        },
+        { role: "user", content: `${message}` }
+      ],
       temperature: 0.7,
     }),
   })

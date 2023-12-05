@@ -33,4 +33,7 @@ function openaiResponse(message) {
       });
   }
   
-  openaiResponse("is sky blue?")
+
+  // openaiResponse("why do cats purr?")
+
+  module.exports = { openaiResponse };

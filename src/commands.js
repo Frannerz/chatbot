@@ -2,6 +2,7 @@ const { jokes } = require("./jokes");
 const { getWeather } = require("./weather");
 const { openaiResponse } = require("./openai");
 const commandLog = [];
+const chatHistory = [];
 
 const commandsList = {
   ping: (message) => replyToMessage(message, "Pong!"),
@@ -70,6 +71,20 @@ async function chat(message) {
       // Call the openaiResponse function and wait for the result
       const response = await openaiResponse(prompt);
 
+      // log chat history 
+
+      const chatElement = {
+        user: message.author.username,
+        prompt: prompt,
+        response: response,
+        timestamp: new Date(),
+      };
+
+      chatHistory.push(chatElement);
+
+      console.log(chatHistory);
+
+
       // Send the response back to the user
       replyToMessage(message, response);
     } catch (error) {
@@ -85,4 +100,5 @@ async function chat(message) {
   }
 }
 
-module.exports = { commandsList, commandLog };
+module.exports = { commandsList, commandLog, chatHistory };
+

@@ -70,11 +70,13 @@ async function chat(message) {
     try {
       // Concatenate chat history with the current prompt
       const fullPrompt =
+        "Previous chat history for reference:\n" +
         chatHistory
           .map(
             (entry) => `${entry.user}: ${entry.prompt}\nBot: ${entry.response}`
           )
-          .join("\n") + `\n${message.author.username}: ${prompt}`;
+          .join("\n") +
+        `\n\nCurrent question: ${prompt}`;
 
       console.log(`full prompt: ${fullPrompt}`);
       const response = await openaiResponse(fullPrompt);

@@ -14,7 +14,6 @@ const commandsList = {
   log: logCommands,
   weather: getWeather,
   chat: chat,
-
 };
 
 function replyToMessage(msg, answer) {
@@ -64,15 +63,25 @@ function getRandomJoke() {
 
 // function to access openai
 async function chat(message) {
-  const prompt = message;
+  const prompt = message.content;
+  console.log(`current prompt: ${prompt}`);
 
   if (prompt) {
     try {
-      // Call the openaiResponse function and wait for the result
-      const response = await openaiResponse(prompt);
+      // Concatenate chat history with the current prompt
+      const fullPrompt =
+        "Previous chat history for reference:\n" +
+        chatHistory
+          .map(
+            (entry) => `${entry.user}: ${entry.prompt}\nBot: ${entry.response}`
+          )
+          .join("\n") +
+        `\n\nCurrent question: ${prompt}`;
 
-      // log chat history 
+      console.log(`full prompt: ${fullPrompt}`);
+      const response = await openaiResponse(fullPrompt);
 
+      // Log chat history
       const chatElement = {
         user: message.author.username,
         prompt: prompt,
@@ -82,8 +91,7 @@ async function chat(message) {
 
       chatHistory.push(chatElement);
 
-      console.log(chatHistory);
-
+      // console.log(chatHistory);
 
       // Send the response back to the user
       replyToMessage(message, response);
@@ -101,4 +109,3 @@ async function chat(message) {
 }
 
 module.exports = { commandsList, commandLog, chatHistory };
-

@@ -19,7 +19,7 @@ function openaiResponse(message) {
       messages: [
         {
           role: "system",
-          content: "You are a funny assistant. When you respond to the user message, add a joke to the end. Make sure the joke is different each time"
+          content: "You are a coding tutor. If asked for code reading problems, give the the user difficult javascript code read problems, with a variety of array and string methods. The functions should have letters for names. Don't make it clear if the input is an array or string etc. just use letters as arguments. Do not give the output. "
         },
         { role: "user", content: `${message}` }
       ],

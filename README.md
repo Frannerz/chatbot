@@ -1,5 +1,4 @@
-# Oskar-Fran-Phoebe
-Discord Bot!
+# Discord Bot!
 
 How to run me:
 1. Clone the repository
